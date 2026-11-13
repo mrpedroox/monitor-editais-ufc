@@ -2,7 +2,7 @@
 
 Bot de Telegram que monitora editais, resoluções e o calendário acadêmico da UFC, responde perguntas sobre eles **citando a fonte** e avisa quando sai um edital novo.
 
-> 🚧 **Status:** em desenvolvimento (etapa 0). Veja o [roadmap](#-roadmap) e o [ROADMAP.md](ROADMAP.md) detalhado.
+> 🚧 **Status:** em desenvolvimento (etapa 1 concluída, `v0.1`). Veja o [roadmap](#-roadmap) e o [ROADMAP.md](ROADMAP.md) detalhado.
 
 Projeto feito com **PBL (aprendizagem baseada em projetos)**: cada etapa existe para ensinar um conceito, e o aprendizado de cada uma fica registrado abaixo.
 
@@ -49,7 +49,7 @@ flowchart LR
 ```
 monitor-editais-ufc/
 ├── src/
-│   ├── scraper/     # coleta e parsing das páginas
+│   ├── scraper/     # fetch.py, prex.py (parser), models.py, export.py
 │   ├── rag/         # ingestão, índice vetorial, retriever, cadeia
 │   └── bot/         # handlers do Telegram e notificações
 ├── tests/           # testes (com HTML de exemplo como fixture)
@@ -79,14 +79,22 @@ cp .env.example .env   # preencha as variáveis
 | `TELEGRAM_CHAT_ID` | Chat que recebe os avisos de edital novo |
 | `LLM_API_KEY` | Chave do provedor de LLM/embeddings |
 
-> Os comandos de execução (scraper, ingestão, bot) serão documentados conforme as etapas forem concluídas.
+### Rodar o scraper (Etapa 1)
+
+```bash
+python -m src.scraper   # imprime os editais da PREX e salva em data/editais.json
+pytest -q               # testes do parser (rodam sem internet, com HTML salvo)
+ruff check .            # lint
+```
+
+> Os comandos de ingestão e do bot serão documentados conforme as etapas forem concluídas.
 
 ## 🗺️ Roadmap
 
 Detalhes de branches, commits e critérios de pronto em [ROADMAP.md](ROADMAP.md).
 
-- [ ] **Etapa 0** · Setup do repositório, lint e CI
-- [ ] **Etapa 1** · Scraper de uma página de editais
+- [x] **Etapa 0** · Setup do repositório, lint e CI
+- [x] **Etapa 1** · Scraper de uma página de editais
 - [ ] **Etapa 2** · Detecção de editais novos (SQLite)
 - [ ] **Etapa 3** · Ingestão de PDFs (extração + chunking)
 - [ ] **Etapa 4** · Índice vetorial e retriever
@@ -102,7 +110,7 @@ _Preencha ao concluir cada etapa (conceito, erro que me ensinou algo, decisão t
 
 | Etapa | Aprendizado |
 |---|---|
-| 1 | _…_ |
+| 1 | _Separar buscar de interpretar permite testar o parser sem internet, com HTML salvo como fixture. A fixture revelou casos que eu não previa (um "Resultado Final" dentro de uma lista de aditivos) e a página real revelou outros ("neste link", `n°` vs `nº`): testar com dado real e com dado de fixture pegam erros diferentes. Também aprendi que arquivo não salvo no editor gera um erro de import enganoso._ |
 | 2 | _…_ |
 
 ## ⚠️ Limitações
