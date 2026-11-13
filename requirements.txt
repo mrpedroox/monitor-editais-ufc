@@ -1,0 +1,7 @@
+# Scraper (Etapa 1)
+requests
+beautifulsoup4
+
+# Qualidade (Etapa 0)
+pytest
+ruff
